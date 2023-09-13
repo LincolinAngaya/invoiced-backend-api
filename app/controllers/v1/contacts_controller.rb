@@ -7,8 +7,21 @@ class V1::ContactsController < ApplicationController
 
     def create 
        @contact = Contact.new(contact_params)
+
+       @contact.save 
+       render json: @contacts, status: :created
     end
 
+    def destroy
+      @contact = Contact.find(params[:id])
+    
+      if @contact.destroy
+        head :no_content
+      else
+        render json: { error: 'Failed to destroy contact' }, status: :unprocessable_entity
+      end
+    end
+    
 
     private 
 
